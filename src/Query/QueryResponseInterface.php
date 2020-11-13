@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace JasonBenett\CQRS\Query;
 
-interface QueryResponseInterface
+use JasonBenett\CQRS\Response\ResponseInterface;
+
+interface QueryResponseInterface extends ResponseInterface
 {
 }
