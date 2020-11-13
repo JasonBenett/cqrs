@@ -41,7 +41,7 @@ class DirectQueryBusTest extends TestCase
 
         $sut = new DirectQueryBus(...$handlers);
 
-        self::assertSame($response, $sut->handle($query));
+        self::assertSame($response, $sut->dispatch($query));
     }
 
     /**
@@ -66,6 +66,6 @@ class DirectQueryBusTest extends TestCase
         $this->expectException(QueryHandlerNotFoundException::class);
 
         $sut = new DirectQueryBus(...$handlers);
-        $sut->handle($query);
+        $sut->dispatch($query);
     }
 }

@@ -5,25 +5,29 @@ declare(strict_types=1);
 namespace JasonBenett\CQRS\Query;
 
 use JasonBenett\CQRS\Query\Exception\QueryHandlerNotFoundException;
+use JasonBenett\CQRS\Query\Middleware\QueryBusMiddlewareInterface;
 
-class DirectQueryBus implements QueryBusInterface
+class DirectQueryBus implements QueryBusMiddlewareInterface
 {
     /** @var QueryHandlerInterface[] */
     private array $handlers;
 
     public function __construct(QueryHandlerInterface ...$handlers)
     {
-        $this->handlers = $handlers;
+        foreach ($handlers as $handler) {
+            $this->handlers[$handler->listenTo()] = $handler;
+        }
     }
 
-    public function handle(object $query): QueryResponseInterface
+    public function dispatch(object $subject): QueryResponseInterface
     {
-        foreach ($this->handlers as $handler) {
-            if ($handler->listenTo() === get_class($query)) {
-                return $handler->handle($query);
-            }
+        $subjectClass = get_class($subject);
+        $handler      = $this->handlers[$subjectClass] ?? null;
+
+        if (null === $handler) {
+            throw new QueryHandlerNotFoundException($subject);
         }
 
-        throw new QueryHandlerNotFoundException($query);
+        return $handler->handle($subject);
     }
 }

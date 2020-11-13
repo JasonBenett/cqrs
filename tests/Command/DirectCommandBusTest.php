@@ -41,7 +41,7 @@ class DirectCommandBusTest extends TestCase
 
         $sut = new DirectCommandBus(...$handlers);
 
-        self::assertSame($response, $sut->handle($command));
+        self::assertSame($response, $sut->dispatch($command));
     }
 
     /**
@@ -66,6 +66,6 @@ class DirectCommandBusTest extends TestCase
         $this->expectException(CommandHandlerNotFoundException::class);
 
         $sut = new DirectCommandBus(...$handlers);
-        $sut->handle($command);
+        $sut->dispatch($command);
     }
 }
