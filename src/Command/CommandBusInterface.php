@@ -6,5 +6,5 @@ namespace JasonBenett\CQRS\Command;
 
 interface CommandBusInterface
 {
-    public function handle(object $command): void;
+    public function handle(object $command): CommandResponseInterface;
 }

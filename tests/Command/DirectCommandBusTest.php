@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace JasonBenett\CQRS\Tests\Command;
 
 use JasonBenett\CQRS\Command\CommandHandlerInterface;
+use JasonBenett\CQRS\Command\CommandResponseInterface;
 use JasonBenett\CQRS\Command\DirectCommandBus;
 use JasonBenett\CQRS\Command\Exception\CommandHandlerNotFoundException;
 use PHPUnit\Framework\TestCase;
@@ -27,16 +28,20 @@ class DirectCommandBusTest extends TestCase
             $relevantHandler = $this->createMock(CommandHandlerInterface::class),
         ];
 
+        $response = $this->createMock(CommandResponseInterface::class);
+
         $relevantHandler->expects(self::once())
             ->method('listenTo')
             ->willReturn(get_class($command));
 
         $relevantHandler->expects(self::once())
             ->method('handle')
-            ->with($command);
+            ->with($command)
+            ->willReturn($response);
 
         $sut = new DirectCommandBus(...$handlers);
-        $sut->handle($command);
+
+        self::assertSame($response, $sut->handle($command));
     }
 
     /**

@@ -16,13 +16,11 @@ class DirectCommandBus implements CommandBusInterface
         $this->handlers = $handlers;
     }
 
-    public function handle(object $command): void
+    public function handle(object $command): CommandResponseInterface
     {
         foreach ($this->handlers as $handler) {
             if ($handler->listenTo() === get_class($command)) {
-                $handler->handle($command);
-
-                return;
+                return $handler->handle($command);
             }
         }
 

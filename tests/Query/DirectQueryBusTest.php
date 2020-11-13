@@ -40,7 +40,8 @@ class DirectQueryBusTest extends TestCase
             ->willReturn($response);
 
         $sut = new DirectQueryBus(...$handlers);
-        $sut->handle($query);
+
+        self::assertSame($response, $sut->handle($query));
     }
 
     /**

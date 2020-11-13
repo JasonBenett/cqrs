@@ -6,7 +6,7 @@ namespace JasonBenett\CQRS\Command;
 
 interface CommandHandlerInterface
 {
-    public function handle(object $command): void;
+    public function handle(object $command): CommandResponseInterface;
 
     public function listenTo(): string;
 }
